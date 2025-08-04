@@ -1,7 +1,12 @@
 const admin = require("firebase-admin");
 const path = require("path");
+require("dotenv").config(); // <-- Load environment variables
 
-const serviceAccount = require(path.join(__dirname, "serviceAccountKey.json"));
+// Load key path from .env
+const keyPath = path.join(__dirname, "..", process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
+// Import the service account key
+const serviceAccount = require(keyPath);
 
 // Initialize Firebase Admin only once
 if (!admin.apps.length) {
@@ -29,9 +34,9 @@ const sendNotification = async (token) => {
     },
   };
 
- const response = await admin.messaging().send(message);
+  const response = await admin.messaging().send(message);
   console.log("✅ Push Notification sent successfully!");
-    return response;
+  return response;
 };
 
 module.exports = sendNotification;
